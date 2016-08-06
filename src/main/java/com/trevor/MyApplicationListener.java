@@ -8,7 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringApplicationRunListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -59,8 +59,8 @@ public class MyApplicationListener implements SpringApplicationRunListener {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			RedisTemplate<Integer, String> redisTemplate = (RedisTemplate<Integer, String>) context.getBean("redisTemplate");
-			redisTemplate.opsForValue().set(idPrice.getKey(), priceJson);
+			StringRedisTemplate redisTemplate = context.getBean(StringRedisTemplate.class);
+			redisTemplate.opsForValue().set(idPrice.getKey().toString(), priceJson);
 		}
 	}
 }

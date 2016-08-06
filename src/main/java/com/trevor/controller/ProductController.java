@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +22,7 @@ import com.trevor.model.Product;
 public class ProductController {
 	
 	@Autowired
-	public RedisTemplate<Integer, String> redisTemplate;
+	public StringRedisTemplate redisTemplate;
 	
 	@RequestMapping(value="/product/{id}",method=RequestMethod.GET)
 	public Product getProduct(@PathVariable("id") int id){
