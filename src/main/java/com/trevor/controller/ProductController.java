@@ -25,7 +25,7 @@ public class ProductController {
 	public StringRedisTemplate redisTemplate;
 	
 	@RequestMapping(value="/product/{id}",method=RequestMethod.GET)
-	public Product getProduct(@PathVariable("id") int id){
+	public Product getProduct(@PathVariable("id") Integer id){
 		
 		RestTemplate restTemplate = new RestTemplate();
 		String fooResourceUrl = "https://api.target.com/products/v3/"+id+"?fields=descriptions&id_type=TCIN&key=43cJWpLjH8Z8oR18KdrZDBKAgLLQKJjz";
@@ -39,7 +39,7 @@ public class ProductController {
 				JsonNode onlineDescriptionValueNode = onlineDescriptionNode.path("value");
 				String description = onlineDescriptionValueNode.textValue();
 				
-				String priceJson = redisTemplate.opsForValue().get(id);
+				String priceJson = redisTemplate.opsForValue().get(id.toString());
 				
 				Price price;
 				if(priceJson == null){
