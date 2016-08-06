@@ -1,0 +1,47 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE")
+	}
+}
+
+apply plugin: "java"
+apply plugin: "maven"
+apply plugin: 'eclipse'
+apply plugin: "idea"
+apply plugin: 'spring-boot'
+apply plugin: 'war'
+
+group = "trevor"
+version = 1.0
+
+repositories {
+    mavenCentral()
+}
+
+//create a single Jar with all dependencies
+task fatJar(type: Jar) {
+	manifest {
+		attributes 'Implementation-Title': 'Gradle Jar File Example',
+			'Implementation-Version': version,
+			'Main-Class': 'com.trevor.Application'
+	}
+	baseName = project.name + '-all'
+	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+	with jar
+}
+
+jar {
+	manifest {
+		attributes 'Main-Class': 'com.trevor.Application'
+	}
+}
+
+dependencies {
+	compile("org.springframework.boot:spring-boot-starter-web")
+	compile("org.springframework.boot:spring-boot-starter-data-redis")
+
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
