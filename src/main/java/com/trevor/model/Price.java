@@ -9,6 +9,10 @@ public class Price {
 	private BigDecimal value;
 	private String currencyCode;
 	
+	public Price(){
+		
+	}
+	
 	public Price(BigDecimal value, String currencyCode){
 		this.value = value;
 		this.currencyCode = currencyCode;

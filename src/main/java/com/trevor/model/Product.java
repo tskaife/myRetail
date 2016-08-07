@@ -7,6 +7,10 @@ public class Product {
 	private String name;
 	private Price currentPrice;
 	
+	public Product(){
+		
+	}
+	
 	public Product(int id, String name, Price currentPrice) {
 		super();
 		this.id = id;
