@@ -1,0 +1,2 @@
+application:
+    targetProducApitUrl: https://api.target.com/products/v3/%s?fields=descriptions&id_type=TCIN&key=43cJWpLjH8Z8oR18KdrZDBKAgLLQKJjz
