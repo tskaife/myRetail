@@ -2,7 +2,7 @@ package com.trevor.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Product {
+public class Product implements JsonObject{
 	private int id;
 	private String name;
 	private Price currentPrice;

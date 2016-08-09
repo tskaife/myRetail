@@ -5,7 +5,7 @@ import java.math.RoundingMode;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Price {
+public class Price implements JsonObject{
 	private BigDecimal value;
 	private String currencyCode;
 	

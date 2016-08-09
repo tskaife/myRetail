@@ -17,6 +17,9 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trevor.Utils;
+import com.trevor.model.ErrorJson;
+import com.trevor.model.JsonObject;
+import com.trevor.model.MessageJson;
 import com.trevor.model.Price;
 import com.trevor.model.Product;
 
@@ -34,20 +37,20 @@ public class ProductController {
 	 * @return		Product json
 	 */
 	@RequestMapping(value = "/product/{id}", method = RequestMethod.GET)
-	public String getProduct(@PathVariable("id") Integer id) {
+	public JsonObject getProduct(@PathVariable("id") Integer id) {
 		String name = getProductName(id);
 		if (name == null) {
-			return "{\"error\":\"Well, that's embarasing for Target's api.\"}";
+			return new ErrorJson("Well, that's embarasing for Target's api.");
 		}
 
 		Price price = getPrice(id);
 		if (price == null) {
-			return "{\"error\":\"Something went wrong getting the price from redis, did you try turning off and back on again?\"}";
+			return new ErrorJson("Something went wrong getting the price from redis, did you try turning off and back on again?");
 		}
 
 		Product product = new Product(id, name, price);
 
-		return Utils.convertObjectToJson(product);
+		return product;
 	}
 
 	/**
@@ -121,7 +124,7 @@ public class ProductController {
 	 * @return			Message
 	 */
 	@RequestMapping(value = "/product/{id}", method = RequestMethod.PUT)
-	public String putProduct(@PathVariable("id") Integer id, @RequestBody String priceJson) {
+	public JsonObject putProduct(@PathVariable("id") Integer id, @RequestBody String priceJson) {
 
 		ObjectMapper mapper = new ObjectMapper();
 		Price price = null;
@@ -130,12 +133,12 @@ public class ProductController {
 			price = mapper.readValue(priceJson, Price.class);
 		} catch (IOException e) {
 			e.printStackTrace();
-			return "{\"error\":\"Are you sure you sent me a price?\"}";
+			return new ErrorJson("Are you sure you sent me a price?");
 		}
 
 		//insert the price object into redis using the id given
 		redisTemplate.opsForValue().set(id.toString(), Utils.convertObjectToJson(price));
 
-		return "{\"message\":\"Price update, stay classy\"}";
+		return new MessageJson("Price update, stay classy");
 	}
 }
