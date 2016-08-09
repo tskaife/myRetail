@@ -40,7 +40,7 @@ public class ProductController {
 	public JsonObject getProduct(@PathVariable("id") Integer id) {
 		String name = getProductName(id);
 		if (name == null) {
-			return new ErrorJson("Well, that's embarasing for Target's api.");
+			return new ErrorJson("Well, that's embarasing for Target's api. It couldn't find the product.");
 		}
 
 		Price price = getPrice(id);
