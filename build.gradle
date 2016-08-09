@@ -14,8 +14,17 @@ apply plugin: "idea"
 apply plugin: 'spring-boot'
 apply plugin: 'war'
 
+bootRun {
+	addResources = true
+}
+
 springBoot {
 	executable = true
+	backupSource = false
+}
+
+bootRepackage {
+	mainClass = 'com.trevor.Application'
 }
 
 group = "trevor"
@@ -23,18 +32,6 @@ version = 1.0
 
 repositories {
     mavenCentral()
-}
-
-//create a single Jar with all dependencies
-task fatJar(type: Jar) {
-	manifest {
-		attributes 'Implementation-Title': 'Gradle Jar File Example',
-			'Implementation-Version': version,
-			'Main-Class': 'com.trevor.Application'
-	}
-	baseName = project.name + '-all'
-	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-	with jar
 }
 
 jar {
@@ -46,6 +43,7 @@ jar {
 dependencies {
 	compile("org.springframework.boot:spring-boot-starter-web")
 	compile("org.springframework.boot:spring-boot-starter-data-redis")
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
