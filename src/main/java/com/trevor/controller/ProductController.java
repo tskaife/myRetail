@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.trevor.model.ErrorJson;
-import com.trevor.model.JsonObject;
 import com.trevor.model.MessageJson;
 import com.trevor.model.Price;
 import com.trevor.model.Product;
@@ -31,15 +29,15 @@ public class ProductController {
 	 * @return		Product json
 	 */
 	@RequestMapping(value = "/product/{id}", method = RequestMethod.GET)
-	public JsonObject getProduct(@PathVariable("id") Integer id) {
+	public Product getProduct(@PathVariable("id") Integer id) {
 		String name = productService.getProductName(id);
 		if (name == null) {
-			return new ErrorJson("Well, that's embarasing for Target's api. It couldn't find the product.");
+			throw new IllegalStateException("Well, that's embarasing for Target's api. It couldn't find the product so we have no name.");
 		}
 
 		Price price = productService.getPrice(id);
 		if (price == null) {
-			return new ErrorJson("Something went wrong getting the price from redis, did you try turning off and back on again?");
+			throw new IllegalStateException("Something went wrong getting the price from redis, did you try turning off and back on again?");
 		}
 
 		Product product = new Product(id, name, price);
@@ -55,7 +53,7 @@ public class ProductController {
 	 * @return			Message
 	 */
 	@RequestMapping(value = "/product/{id}", method = RequestMethod.PUT)
-	public JsonObject putProduct(@PathVariable("id") Integer id, @RequestBody String priceJson) {
+	public MessageJson putProduct(@PathVariable("id") Integer id, @RequestBody String priceJson) {
 
 		ObjectMapper mapper = new ObjectMapper();
 		Price price = null;
@@ -63,8 +61,7 @@ public class ProductController {
 		try {
 			price = mapper.readValue(priceJson, Price.class);
 		} catch (IOException e) {
-			e.printStackTrace();
-			return new ErrorJson("Are you sure you sent me a price?");
+			throw new IllegalStateException("Are you sure you sent me a price?", e);
 		}
 		
 		productService.updatePrice(id, price);

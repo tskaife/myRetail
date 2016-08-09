@@ -1,6 +1,6 @@
 package com.trevor.model;
 
-public class MessageJson implements JsonObject {
+public class MessageJson {
 
 	String message;
 
