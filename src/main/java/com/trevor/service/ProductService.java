@@ -45,7 +45,7 @@ public class ProductService {
 				price = mapper.readValue(priceJson, Price.class);
 			} catch (IOException e) {
 				e.printStackTrace();
-				return null;
+				throw new IllegalStateException("Couldn't read the price from redis for the given id.", e);
 			}
 		}
 		return price;
@@ -60,7 +60,7 @@ public class ProductService {
 	public String getProductName(Integer id) {
 		RestTemplate restTemplate = new RestTemplate();
 		String url = String.format(applicationConfig.getTargetProducApitUrl(), id);
-		ResponseEntity<String> response = restTemplate.getForEntity(url + "/1", String.class);
+		ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
 		//Make sure we get a good status, else return null
 		if (response.getStatusCode().value() == HttpStatus.OK.value()) {
@@ -71,7 +71,7 @@ public class ProductService {
 				root = mapper.readTree(response.getBody());
 			} catch (IOException e) {
 				e.printStackTrace();
-				return null;
+				throw new IllegalStateException("Had troubles reading the response from Target's api.",e);
 			}
 			//getting the online description since that one looked the best.
 			JsonNode onlineDescriptionNode = root.findPath("online_description");
@@ -79,7 +79,7 @@ public class ProductService {
 
 			//if the node isn't found, return null
 			if (onlineDescriptionValueNode.isMissingNode()) {
-				return null;
+				throw new IllegalStateException("Couldn't find the online_description from Target's api response.");
 			}
 
 			return onlineDescriptionValueNode.textValue();
@@ -88,6 +88,12 @@ public class ProductService {
 		return null;
 	}
 	
+	/**
+	 * Updates the price in redis with the given id.
+	 * 
+	 * @param id	Product id
+	 * @param price	Price object
+	 */
 	public void updatePrice(Integer id, Price price){
 		//insert the price object into redis using the id given
 		redisTemplate.opsForValue().set(id.toString(), Utils.convertObjectToJson(price));

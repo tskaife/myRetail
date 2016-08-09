@@ -10,7 +10,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import redis.clients.jedis.JedisPoolConfig;
 
 @Configuration
-@EnableAutoConfiguration 
+@EnableAutoConfiguration
 public class RedisConfig {
 	@Bean
 	public RedisConnectionFactory jedisConnectionFactory() {
@@ -18,17 +18,17 @@ public class RedisConfig {
 		poolConfig.setMaxTotal(5);
 		poolConfig.setTestOnBorrow(true);
 		poolConfig.setTestOnReturn(true);
-		JedisConnectionFactory ob = new JedisConnectionFactory(poolConfig);
-		ob.setUsePool(true);
-		ob.setHostName("localhost");
-		ob.setPort(6379);
-		return ob;
+		JedisConnectionFactory redisConnectionFactory = new JedisConnectionFactory(poolConfig);
+		redisConnectionFactory.setUsePool(true);
+		redisConnectionFactory.setHostName("localhost");
+		redisConnectionFactory.setPort(6379);
+		return redisConnectionFactory;
 	}
-	
+
 	@Bean
-	public StringRedisTemplate  redisTemplate(){
+	public StringRedisTemplate redisTemplate() {
 		StringRedisTemplate redisTemplate = new StringRedisTemplate();
 		redisTemplate.setConnectionFactory(jedisConnectionFactory());
 		return redisTemplate;
 	}
-} 
+}

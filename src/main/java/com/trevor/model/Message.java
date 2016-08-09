@@ -1,14 +1,14 @@
 package com.trevor.model;
 
-public class MessageJson {
+public class Message {
 
 	String message;
 
-	public MessageJson() {
+	public Message() {
 		
 	}
 		
-	public MessageJson(String message) {
+	public Message(String message) {
 		super();
 		this.message = message;
 	}

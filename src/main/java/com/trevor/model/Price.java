@@ -10,7 +10,6 @@ public class Price{
 	private String currencyCode;
 	
 	public Price(){
-		
 	}
 	
 	public Price(BigDecimal value, String currencyCode){

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.trevor.model.MessageJson;
+import com.trevor.model.Message;
 import com.trevor.model.Price;
 import com.trevor.model.Product;
 import com.trevor.service.ProductService;
@@ -32,7 +32,7 @@ public class ProductController {
 	public Product getProduct(@PathVariable("id") Integer id) {
 		String name = productService.getProductName(id);
 		if (name == null) {
-			throw new IllegalStateException("Well, that's embarasing for Target's api. It couldn't find the product so we have no name.");
+			throw new IllegalStateException("For some reason I couldn't get the It couldn't get the product name from Target's api.");
 		}
 
 		Price price = productService.getPrice(id);
@@ -53,7 +53,7 @@ public class ProductController {
 	 * @return			Message
 	 */
 	@RequestMapping(value = "/product/{id}", method = RequestMethod.PUT)
-	public MessageJson putProduct(@PathVariable("id") Integer id, @RequestBody String priceJson) {
+	public Message putProduct(@PathVariable("id") Integer id, @RequestBody String priceJson) {
 
 		ObjectMapper mapper = new ObjectMapper();
 		Price price = null;
@@ -66,6 +66,6 @@ public class ProductController {
 		
 		productService.updatePrice(id, price);
 
-		return new MessageJson("Price update, stay classy");
+		return new Message("Price update, stay classy");
 	}
 }
