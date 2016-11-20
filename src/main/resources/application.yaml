@@ -1,2 +1,8 @@
 application:
     targetProducApitUrl: https://api.target.com/products/v3/%s?fields=descriptions&id_type=TCIN&key=43cJWpLjH8Z8oR18KdrZDBKAgLLQKJjz
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/lula
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver

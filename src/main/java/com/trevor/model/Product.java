@@ -2,28 +2,27 @@ package com.trevor.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Set;
+
+@Entity
 public class Product{
-	private int id;
+	@Id
+	private Integer productId;
 	private String name;
-	private Price currentPrice;
-	
-	public Product(){
-		
-	}
-	
-	public Product(int id, String name, Price currentPrice) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.currentPrice = currentPrice;
+	private BigDecimal cost;
+	private BigDecimal price;
+	@ManyToMany
+	@JoinTable(name = "product_x_size", joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "product_id"), inverseJoinColumns = @JoinColumn(name = "size_id", referencedColumnName = "size_id"))
+	private Set<Size> sizes;
+
+	public Integer getProductId() {
+		return productId;
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
+	public void setProductId(Integer productId) {
+		this.productId = productId;
 	}
 
 	public String getName() {
@@ -34,12 +33,19 @@ public class Product{
 		this.name = name;
 	}
 
-	@JsonProperty("current_price")
-	public Price getCurrentPrice() {
-		return currentPrice;
+	public BigDecimal getCost() {
+		return cost;
 	}
 
-	public void setCurrentPrice(Price currentPrice) {
-		this.currentPrice = currentPrice;
+	public void setCost(BigDecimal cost) {
+		this.cost = cost;
+	}
+
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
 	}
 }

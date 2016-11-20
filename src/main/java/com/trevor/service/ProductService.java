@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trevor.ApplicationConfig;
 import com.trevor.Utils;
-import com.trevor.model.Price;
+import com.trevor.model.Customer;
 
 @Service
 public class ProductService {
@@ -31,18 +31,18 @@ public class ProductService {
 	 * @param id	Product id
 	 * @return		Price object
 	 */
-	public Price getPrice(Integer id) {
+	public Customer getPrice(Integer id) {
 		String priceJson = redisTemplate.opsForValue().get(id.toString());
-		Price price;
+		Customer price;
 		if (priceJson == null) {
 			//If price isn't in redis, just use this default price
-			price = new Price(new BigDecimal(1.23), "USD");
+			price = new Customer(new BigDecimal(1.23), "USD");
 			redisTemplate.opsForValue().set(id.toString(), Utils.convertObjectToJson(price));
 		} else {
 			//if the price is in redis, convert the json to a price
 			ObjectMapper mapper = new ObjectMapper();
 			try {
-				price = mapper.readValue(priceJson, Price.class);
+				price = mapper.readValue(priceJson, Customer.class);
 			} catch (IOException e) {
 				e.printStackTrace();
 				throw new IllegalStateException("Couldn't read the price from redis for the given id.", e);
@@ -94,7 +94,7 @@ public class ProductService {
 	 * @param id	Product id
 	 * @param price	Price object
 	 */
-	public void updatePrice(Integer id, Price price){
+	public void updatePrice(Integer id, Customer price){
 		//insert the price object into redis using the id given
 		redisTemplate.opsForValue().set(id.toString(), Utils.convertObjectToJson(price));
 	}

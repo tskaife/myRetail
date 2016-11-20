@@ -5,13 +5,13 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import com.trevor.model.Price;
+import com.trevor.model.Customer;
 
 public class UtilsTest {
 
 	@Test
 	public void testConvertObjectToJson() {
-		Price price = new Price(1, "USD");
+		Customer price = new Customer(1, "USD");
 		String priceJson = Utils.convertObjectToJson(price);
 		
 		assertNotNull(priceJson);

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trevor.model.Message;
-import com.trevor.model.Price;
+import com.trevor.model.Customer;
 import com.trevor.model.Product;
 import com.trevor.service.ProductService;
 
@@ -35,7 +35,7 @@ public class ProductController {
 			throw new IllegalStateException("For some reason I couldn't get the It couldn't get the product name from Target's api.");
 		}
 
-		Price price = productService.getPrice(id);
+		Customer price = productService.getPrice(id);
 		if (price == null) {
 			throw new IllegalStateException("Something went wrong getting the price from redis, did you try turning off and back on again?");
 		}
@@ -56,10 +56,10 @@ public class ProductController {
 	public Message putProduct(@PathVariable("id") Integer id, @RequestBody String priceJson) {
 
 		ObjectMapper mapper = new ObjectMapper();
-		Price price = null;
+		Customer price = null;
 		//try to read the json sent as a price object
 		try {
-			price = mapper.readValue(priceJson, Price.class);
+			price = mapper.readValue(priceJson, Customer.class);
 		} catch (IOException e) {
 			throw new IllegalStateException("Are you sure you sent me a price?", e);
 		}
